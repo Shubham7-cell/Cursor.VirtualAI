@@ -2,7 +2,7 @@ import cv2
 import time
 import math
 import numpy as np
-import HandTrackingModule as htm
+import Mod_TrackingHand as htm
 import pyautogui
 import autopy
 from ctypes import cast, POINTER
