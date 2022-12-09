@@ -9,7 +9,7 @@ from ctypes import cast, POINTER  # used for volume control
 from comtypes import CLSCTX_ALL
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 
-wCam, hCam = 670, 500
+wCam, hCam = 640, 480
 cap = cv2.VideoCapture(0)
 cap.set(3, wCam)
 cap.set(4, hCam)
@@ -171,7 +171,6 @@ while True:
             if len(lmList) != 0:
                 x1, y1 = lmList[8][1], lmList[8][2]
                 w, h = autopy.screen.size()
-                #
                 X = int(np.interp(x1, [110, 620], [0, w - 1]))
                 Y = int(np.interp(y1, [20, 350], [0, h - 1]))
                 cv2.circle(img, (lmList[8][1], lmList[8][2]),
@@ -184,7 +183,7 @@ while True:
                 if Y % 2 != 0:
                     Y = Y - Y % 2
                 print(X, Y)
-                autopy.mouse.move(w - X, Y)
+                autopy.mouse.move(X, Y)
               #  pyautogui.moveTo(X,Y)
                 if fingers[0] == 1:
                     pyautogui.click()

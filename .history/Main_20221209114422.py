@@ -184,7 +184,7 @@ while True:
                 if Y % 2 != 0:
                     Y = Y - Y % 2
                 print(X, Y)
-                autopy.mouse.move(w - X, Y)
+                autopy.mouse.move(X, h - Y)
               #  pyautogui.moveTo(X,Y)
                 if fingers[0] == 1:
                     pyautogui.click()

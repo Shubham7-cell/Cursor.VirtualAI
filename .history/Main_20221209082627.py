@@ -9,7 +9,7 @@ from ctypes import cast, POINTER  # used for volume control
 from comtypes import CLSCTX_ALL
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 
-wCam, hCam = 670, 500
+wCam, hCam = 640, 480
 cap = cv2.VideoCapture(0)
 cap.set(3, wCam)
 cap.set(4, hCam)
@@ -18,7 +18,7 @@ pTime = 0
 
 detector = htm.handDetector(maxHands=1, detectionCon=0.85, trackCon=0.8)
 
-devices = AudioUtilities.GetSpeakers()  # to get the volume of the speakers
+devices = AudioUtilities.GetSpeakers()
 interface = devices.Activate(
     IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
 volume = cast(interface, POINTER(IAudioEndpointVolume))
@@ -27,7 +27,7 @@ volRange = volume.GetVolumeRange()  # (-63.5, 0.0, 0.5) min max
 minVol = -63
 maxVol = volRange[1]
 print(volRange)
-hmin = 50  # hmin is the minimum value of hue hue-> color
+hmin = 50
 hmax = 200
 volBar = 400
 volPer = 0
@@ -38,7 +38,7 @@ tipIds = [4, 8, 12, 16, 20]
 mode = ''
 active = 0
 
-pyautogui.FAILSAFE = False  # to disable the fail safe
+pyautogui.FAILSAFE = False
 while True:
     success, img = cap.read()
     img = detector.findHands(img)
@@ -54,8 +54,6 @@ while True:
                 fingers.append(1)
             else:
                 fingers.append(0)
-
-        # lmList -> list of all the landmarks
         elif lmList[tipIds[0]][1] < lmList[tipIds[0 - 1]][1]:
             if lmList[tipIds[0]][1] <= lmList[tipIds[0] - 1][1]:
                 fingers.append(1)
@@ -77,11 +75,11 @@ while True:
         elif (fingers == [1, 1, 0, 0, 0]) & (active == 0):
             mode = 'Volume'
             active = 1
-        elif (fingers == [0, 1, 1, 1, 1] or fingers == [1, 1, 1, 1, 1]) & (active == 0):
+        elif (fingers == [1, 1, 1, 1, 1]) & (active == 0):
             mode = 'Cursor'
             active = 1
 
-############# Scroll Functionality ##############
+############# Scroll Functionality##############
     if mode == 'Scroll':
         active = 1
      #   print(mode)
@@ -171,7 +169,6 @@ while True:
             if len(lmList) != 0:
                 x1, y1 = lmList[8][1], lmList[8][2]
                 w, h = autopy.screen.size()
-                #
                 X = int(np.interp(x1, [110, 620], [0, w - 1]))
                 Y = int(np.interp(y1, [20, 350], [0, h - 1]))
                 cv2.circle(img, (lmList[8][1], lmList[8][2]),
@@ -184,15 +181,12 @@ while True:
                 if Y % 2 != 0:
                     Y = Y - Y % 2
                 print(X, Y)
-                autopy.mouse.move(w - X, Y)
+                autopy.mouse.move(X, Y)
               #  pyautogui.moveTo(X,Y)
-                if fingers[0] == 1:
+                if fingers[0] == 0:
+                    cv2.circle(img, (lmList[4][1], lmList[4][2]),
+                               10, (0, 0, 255), cv2.FILLED)  # thumb
                     pyautogui.click()
-
-                # if fingers[0] == 0:
-                #     cv2.circle(img, (lmList[4][1], lmList[4][2]),
-                #                10, (0, 0, 255), cv2.FILLED)  # thumb
-                #     pyautogui.click()
 
     cTime = time.time()
     fps = 1/((cTime + 0.01)-pTime)
