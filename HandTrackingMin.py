@@ -29,7 +29,7 @@ while True:
                 cx, cy = int(lm.x * width), int(lm.y * height)
                 print(id, cx, cy)
 
-                if id == 9:  # circle for id 1
+                if id == 4:  # circle for id 1
                     cv2.circle(img, (cx, cy), 15, (255, 0, 255), cv2.FILLED)
 
             mpDrawLine.draw_landmarks(img, handlms, mpHands.HAND_CONNECTIONS)  # for single hand
@@ -45,4 +45,4 @@ while True:
     # 3->thickness, (255,0,255)->color,
     # to capture img
     cv2.imshow("Image", img)
-    cv2.waitKey(0)
+    cv2.waitKey(1)
